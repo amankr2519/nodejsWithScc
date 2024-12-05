@@ -4,7 +4,8 @@ const app = express()
 
 app.use(morgan("dev"))
 app.set("view engine" , "ejs")
-
+app.use(express.json())
+app.use(express.urlencoded({extended : true}))
 
 // middleware
 
@@ -23,9 +24,9 @@ app.get("/",(req,res,next)=>{
 
   console.log("this is middleware")
 
-  const a = 2 
-  const b = 3
-  console.log(a+b)
+  // const a = 2 
+  // const b = 3
+  // console.log(a+b)
 
   return next()
 },(req,res)=>{
@@ -39,6 +40,12 @@ app.get("/about",(req,res)=>{
 
 app.get("/profile",(req,res)=>{
   res.send("Profile Page")
+})
+
+
+app.post("/form-data",(req,res)=>{
+  console.log(req.body)
+  res.send('Data received')
 })
 
 app.listen(3000)
