@@ -28,19 +28,19 @@ app.use(express.static("public"))
   
 // })
 
-// app.get("/",(req,res,next)=>{
+app.get("/",(req,res,next)=>{
 
-//   console.log("this is middleware")
+  console.log("this is middleware")
 
-//   // const a = 2 
-//   // const b = 3
-//   // console.log(a+b)
+  // const a = 2 
+  // const b = 3
+  // console.log(a+b)
 
-//   return next()
-// },(req,res)=>{
-//   // res.send("Home Page")
-//   res.render("index")
-// })
+  return next()
+},(req,res)=>{
+  // res.send("Home Page")
+  res.render("index")
+})
 
 app.get("/about",(req,res)=>{
   res.send("About Page")
@@ -72,5 +72,30 @@ app.post("/register",async(req,res)=>{
   
 })
 
+
+app.get("/get-user",(req,res)=>{
+  userModel.findOne({userName : "b"}).then((users)=>{
+    res.send(users)
+  })
+})
+
+
+app.get("/user-update",async(req,res)=>{
+  await userModel.findOneAndUpdate({
+    userName : 'ram'
+  },{
+    userEmail : 'raam@gmail.com'
+  })
+  res.send("User updated")
+
+})
+
+app.get('/delete-user',async(req,res)=>{
+  await userModel.findByIdAndDelete({
+ 
+  userName : "ram "
+  })
+  res.send("user-deleted")
+})
 app.listen(3000)
 
