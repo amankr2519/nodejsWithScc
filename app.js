@@ -3,14 +3,18 @@ const morgan = require('morgan')
 const app = express()
 const userModel = require("./models/user")
 const dbConnection = require("./config/db")
+// 
+const bodyParser = require('body-parser'); // Import body-parser
 
 app.use(morgan("dev"))
 app.set("view engine" , "ejs")
 
 app.use(express.json())
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({extended : true}))
 
 app.use(express.static("public"))
+
 // middleware
 
 // app.use((req,res,next)=>{
@@ -24,19 +28,19 @@ app.use(express.static("public"))
   
 // })
 
-app.get("/",(req,res,next)=>{
+// app.get("/",(req,res,next)=>{
 
-  console.log("this is middleware")
+//   console.log("this is middleware")
 
-  // const a = 2 
-  // const b = 3
-  // console.log(a+b)
+//   // const a = 2 
+//   // const b = 3
+//   // console.log(a+b)
 
-  return next()
-},(req,res)=>{
-  // res.send("Home Page")
-  res.render("index")
-})
+//   return next()
+// },(req,res)=>{
+//   // res.send("Home Page")
+//   res.render("index")
+// })
 
 app.get("/about",(req,res)=>{
   res.send("About Page")
@@ -47,9 +51,25 @@ app.get("/profile",(req,res)=>{
 })
 
 
-app.post("/form-data",(req,res)=>{
-  console.log(req.body)
-  res.send('Data received')
+// app.post("/form-data",(req,res)=>{
+//   console.log(req.body)
+//   res.send('Data received')
+// })
+
+app.get("/register",(req,res)=>{
+  res.render("register")
+})
+
+app.post("/register",async(req,res)=>{
+  const {userName , userEmail, password}  = req.body
+  const user = await userModel.create({
+    userName :  userName,
+    userEmail : userEmail,
+    password : password,
+  })
+  
+  res.send(user)
+  
 })
 
 app.listen(3000)
